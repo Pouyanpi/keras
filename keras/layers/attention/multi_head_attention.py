@@ -701,27 +701,26 @@ class MultiHeadAttention(Layer):
 
         if key_shape is None:
             key_shape = value_shape
-            
+
         query_shape = tf.TensorShape(query_shape)
         value_shape = tf.TensorShape(value_shape)
         key_shape = tf.TensorShape(key_shape)
-        
+
         if query_shape[-1] != value_shape[-1]:
             raise ValueError(
-                "The last dimension of `query_shape` and `key_shape` "
+                "The last dimension of `query_shape` and `value_shape` "
                 f"must be equal, but are {query_shape[-1]}, {value_shape[-1]}. "
-                f"Received: key_dim={value_shape[-1]} expected {query_shape[-1]}"
+                "Received: query_shape={query_shape}, value_shape={value_shape}"
             )
-        
+
         if value_shape[1:-1] != key_shape[1:-1]:
             raise ValueError(
                 "All dimensions of `value` and `key`, except the last one, "
-                f"must be equal. Recieved {value_shape} and "
+                f"must be equal. Received {value_shape} and "
                 f"{key_shape}"
             )
-        
+
         if self._output_shape:
             return query_shape[:-1].concatenate(self._output_shape)
-            
+
         return query_shape
-        
